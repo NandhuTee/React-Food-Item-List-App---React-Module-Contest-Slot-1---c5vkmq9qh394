@@ -61,7 +61,7 @@ function FoodList() {
                             onChange={(e) => setFoodType(e.target.value)}
                         />
                         <div className={`card ${isSecondCardEnabled ? "" : "disabled"}`}>
-                            <form onClick={handleFormClick}>
+                            <form onClick={handleFormClick} style={{ opacity: isFormEnabled ? 1 : 0.5 }}>
                                 <h2>Spiciness Level:</h2>
                                 <input
                                     name="spicinessLevel"
