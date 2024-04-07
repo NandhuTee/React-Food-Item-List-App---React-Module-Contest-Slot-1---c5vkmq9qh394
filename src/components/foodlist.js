@@ -1,94 +1,61 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import "../styles/App.css";
 
-const List = () => {
-  const [foods, setFoods] = useState([]);
-  const [isFormEnabled, setIsFormEnabled] = useState(false);
-  const [isFirstCodeEnabled, setIsFirstCodeEnabled] = useState(false);
-  const [isSecondCodeEnabled, setIsSecondCodeEnabled] = useState(false);
+function FoodList() {
+	const [foods, setFoods] = useState([]);
+	const [itemName, setItemName] = useState("");
+	const [foodType, setFoodType] = useState("");
+	const [spicinessLevel, setSpicinessLevel] = useState("");
+	const [isFirstCardEnabled, setIsFirstCardEnabled] = useState(false);
+	const [isSecondCardEnabled, setIsSecondCardEnabled] = useState(false);
+	const [isFormEnabled, setIsFormEnabled] = useState(false);
 
-  const [newFood, setNewFood] = useState({
-    name: '',
-    foodType: '',
-    spicinessLevel: ''
-  });
+	return (
+		<>
+			<div className="container">
+				<h1>Food Items List</h1>
+				<button>Add Food</button>
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setNewFood({ ...newFood, [name]: value });
-  };
+				<div className="card-container">
+                        <>
+							<h2>Item Name:</h2>
+							<input
+								name="itemName"
+								type="text"
+								disabled={!isFirstCardEnabled}
+							/>
+							<h2>Food Type:</h2>
+							<input
+								name="foodType"
+								type="text"
+								disabled={!isFirstCardEnabled}
+							/>
+							<div className={`card`}>
+								<form>
+									<h2>Spiciness Level:</h2>
+									<input
+										name="spicinessLevel"
+										type="text"
+										disabled={!isFormEnabled}
+									/>
+								</form>
+							</div>
+						</>
+				</div>
+                <div className={`card ${isSecondCardEnabled ? "" : "disabled"}`}>
+						<button>Save</button>
+				</div>
 
-  const handleAddFood = () => {
-    setIsFirstCodeEnabled(true);
-    setIsSecondCodeEnabled(true);
-  };
+				<ul className="list">
+                        <li>
+							{itemName} ({foodType}) - Spiciness Level:{" "}
+							{spicinessLevel}
+							<button>Delete</button>
+						</li>
+				</ul>
+			</div>
+		</>
+	);
+}
 
-  const handleSave = () => {
-    setFoods([...foods, newFood]);
-    setNewFood({ name: '', foodType: '', spicinessLevel: '' });
-    setIsFirstCodeEnabled(false);
-    setIsSecondCodeEnabled(false);
-  };
-
-  const handleDelete = (index) => {
-    const updatedFoods = foods.filter((_, i) => i !== index);
-    setFoods(updatedFoods);
-  };
-
-  const handleFormClick = () => {
-    setIsFormEnabled(true);
-  };
-
-  return (
-    <div>
-      <button onClick={handleAddFood}>Add Food</button>
-
-      {isFirstCodeEnabled && (
-        <div className="code container">
-          <input
-            type="text"
-            name="name"
-            placeholder="Food name"
-            value={newFood.name}
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="foodType"
-            placeholder="Food type"
-            value={newFood.foodType}
-            onChange={handleChange}
-          />
-          <div
-            className="form"
-            style={{ opacity: isFormEnabled ? 1 : 0.5 }}
-            onClick={handleFormClick}
-          >
-            <input
-              type="text"
-              name="spicinessLevel"
-              placeholder="Spiciness level"
-              value={newFood.spicinessLevel}
-              onChange={handleChange}
-            />
-          </div>
-          {isSecondCodeEnabled && (
-            <button onClick={handleSave}>Save</button>
-          )}
-        </div>
-      )}
-
-      <ul className="list displayed">
-        {foods.map((food, index) => (
-          <li key={index}>
-            <span>{food.name}</span>
-            <span>{food.foodType}</span>
-            <span>{food.spicinessLevel}</span>
-            <button onClick={() => handleDelete(index)}>Delete</button>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
-
-export default List;
+export default FoodList;
