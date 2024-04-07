@@ -12,7 +12,6 @@ function FoodList() {
 
     const handleAddFood = () => {
         setIsFirstCardEnabled(true);
-        setIsSecondCardEnabled(true);
     };
 
     const handleSave = () => {
@@ -36,16 +35,16 @@ function FoodList() {
     };
 
     const handleFormClick = () => {
-        setIsFormEnabled(!isFormEnabled); // Toggle form enabled state
+        setIsFormEnabled(true);
     };
 
     return (
         <>
             <div className="container">
                 <h1>Food Items List</h1>
-                <button onClick={handleAddFood}>Add Food</button>
+                <button onClick={handleAddFood} style={{ display: isFirstCardEnabled ? "none" : "block" }}>Add Food</button>
 
-                <div className="card-container">
+                <div className={`card-container ${isFirstCardEnabled ? "visible" : ""}`}>
                     <>
                         <h2>Item Name:</h2>
                         <input
@@ -53,7 +52,6 @@ function FoodList() {
                             type="text"
                             value={itemName}
                             onChange={(e) => setItemName(e.target.value)}
-                            disabled={!isFirstCardEnabled}
                         />
                         <h2>Food Type:</h2>
                         <input
@@ -61,9 +59,8 @@ function FoodList() {
                             type="text"
                             value={foodType}
                             onChange={(e) => setFoodType(e.target.value)}
-                            disabled={!isFirstCardEnabled}
                         />
-                        <div className={`card ${isFirstCardEnabled ? "enabled" : ""}`} style={{ opacity: isFormEnabled ? 1 : 0.5 }}>
+                        <div className={`card ${isSecondCardEnabled ? "" : "disabled"}`}>
                             <form onClick={handleFormClick}>
                                 <h2>Spiciness Level:</h2>
                                 <input
@@ -74,19 +71,15 @@ function FoodList() {
                                     disabled={!isFormEnabled}
                                 />
                             </form>
+                            <button onClick={handleSave} style={{ display: isSecondCardEnabled ? "block" : "none" }}>Save</button>
                         </div>
                     </>
-                </div>
-
-                <div className={`card ${isSecondCardEnabled ? "" : "disabled"}`}>
-                    <button onClick={handleSave}>Save</button>
                 </div>
 
                 <ul className="list">
                     {foods.map((food, index) => (
                         <li key={index}>
-                            {food.itemName} ({food.foodType}) - Spiciness Level:{" "}
-                            {food.spicinessLevel}
+                            {food.itemName} ({food.foodType}) - Spiciness Level: {food.spicinessLevel}
                             <button onClick={() => handleDelete(index)}>Delete</button>
                         </li>
                     ))}
