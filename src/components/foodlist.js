@@ -1,92 +1,94 @@
-import React, { useState } from "react";
-import "../styles/App.css";
+import React, { useState } from 'react';
 
-function FoodList() {
-    const [foods, setFoods] = useState([]);
-    const [itemName, setItemName] = useState("");
-    const [foodType, setFoodType] = useState("");
-    const [spicinessLevel, setSpicinessLevel] = useState("");
-    const [isFirstCardEnabled, setIsFirstCardEnabled] = useState(false);
-    const [isSecondCardEnabled, setIsSecondCardEnabled] = useState(false);
-    const [isFormEnabled, setIsFormEnabled] = useState(false);
+const List = () => {
+  const [foods, setFoods] = useState([]);
+  const [isFormEnabled, setIsFormEnabled] = useState(false);
+  const [isFirstCodeEnabled, setIsFirstCodeEnabled] = useState(false);
+  const [isSecondCodeEnabled, setIsSecondCodeEnabled] = useState(false);
 
-    const handleAddFood = () => {
-        setIsFirstCardEnabled(true);
-        setIsSecondCardEnabled(true);
-    };
+  const [newFood, setNewFood] = useState({
+    name: '',
+    foodType: '',
+    spicinessLevel: ''
+  });
 
-    const handleSave = () => {
-        setFoods([...foods, { itemName, foodType, spicinessLevel }]);
-        setItemName("");
-        setFoodType("");
-        setSpicinessLevel("");
-        setIsFirstCardEnabled(false);
-        setIsSecondCardEnabled(false);
-    };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setNewFood({ ...newFood, [name]: value });
+  };
 
-    const handleDelete = (index) => {
-        const updatedFoods = [...foods];
-        updatedFoods.splice(index, 1);
-        setFoods(updatedFoods);
-    };
+  const handleAddFood = () => {
+    setIsFirstCodeEnabled(true);
+    setIsSecondCodeEnabled(true);
+  };
 
-    const handleFormClick = () => {
-        setIsFormEnabled(true);
-    };
+  const handleSave = () => {
+    setFoods([...foods, newFood]);
+    setNewFood({ name: '', foodType: '', spicinessLevel: '' });
+    setIsFirstCodeEnabled(false);
+    setIsSecondCodeEnabled(false);
+  };
 
-    return (
-        <>
-            <div className="container">
-                <h1>Food Items List</h1>
-                <button onClick={handleAddFood}>Add Food</button>
+  const handleDelete = (index) => {
+    const updatedFoods = foods.filter((_, i) => i !== index);
+    setFoods(updatedFoods);
+  };
 
-                <div className="card-container">
-                    {isFirstCardEnabled && (
-                        <>
-                            <h2>Item Name:</h2>
-                            <input
-                                name="itemName"
-                                type="text"
-                                value={itemName}
-                                onChange={(e) => setItemName(e.target.value)}
-                            />
-                            <h2>Food Type:</h2>
-                            <input
-                                name="foodType"
-                                type="text"
-                                value={foodType}
-                                onChange={(e) => setFoodType(e.target.value)}
-                            />
-                            <div className={`card ${isFormEnabled ? "" : "disabled"}`}>
-                                <form onClick={handleFormClick}>
-                                    <h2>Spiciness Level:</h2>
-                                    <input
-                                        name="spicinessLevel"
-                                        type="text"
-                                        value={spicinessLevel}
-                                        onChange={(e) => setSpicinessLevel(e.target.value)}
-                                    />
-                                </form>
-                            </div>
-                        </>
-                    )}
-                </div>
+  const handleFormClick = () => {
+    setIsFormEnabled(true);
+  };
 
-                <div className={`card ${isSecondCardEnabled ? "" : "disabled"}`}>
-                    <button onClick={handleSave}>Save</button>
-                </div>
+  return (
+    <div>
+      <button onClick={handleAddFood}>Add Food</button>
 
-                <ul className="list">
-                    {foods.map((food, index) => (
-                        <li key={index}>
-                            {food.itemName} ({food.foodType}) - Spiciness Level: {food.spicinessLevel}
-                            <button onClick={() => handleDelete(index)}>Delete</button>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        </>
-    );
-}
+      {isFirstCodeEnabled && (
+        <div className="code container">
+          <input
+            type="text"
+            name="name"
+            placeholder="Food name"
+            value={newFood.name}
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            name="foodType"
+            placeholder="Food type"
+            value={newFood.foodType}
+            onChange={handleChange}
+          />
+          <div
+            className="form"
+            style={{ opacity: isFormEnabled ? 1 : 0.5 }}
+            onClick={handleFormClick}
+          >
+            <input
+              type="text"
+              name="spicinessLevel"
+              placeholder="Spiciness level"
+              value={newFood.spicinessLevel}
+              onChange={handleChange}
+            />
+          </div>
+          {isSecondCodeEnabled && (
+            <button onClick={handleSave}>Save</button>
+          )}
+        </div>
+      )}
 
-export default FoodList;
+      <ul className="list displayed">
+        {foods.map((food, index) => (
+          <li key={index}>
+            <span>{food.name}</span>
+            <span>{food.foodType}</span>
+            <span>{food.spicinessLevel}</span>
+            <button onClick={() => handleDelete(index)}>Delete</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default List;
